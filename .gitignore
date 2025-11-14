@@ -1,0 +1,14 @@
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Swap / backup / undo files
+*.swp
+*.swo
+*.swm
+*~
+Session.vim
+
+# Node stuff (if you ever have a plugin using npm/yarn)
+node_modules/
+dist/
