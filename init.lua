@@ -39,6 +39,35 @@ vim.opt.rtp:prepend(lazypath)
 -- =========================
 require("lazy").setup({
 
+	-- Neo-tree
+	{
+		"nvim-neo-tree/neo-tree.nvim",
+		branch = "v3.x",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"MunifTanjim/nui.nvim",
+			"nvim-tree/nvim-web-devicons",
+		},
+		lazy = false,
+		config = function()
+			require("neo-tree").setup({
+				window = {
+					mappings = {
+						-- stop Neo-tree from using `e` so we can use it as a global toggle
+						["e"] = "none",
+						["<leader>e"] = "none",
+					},
+				},
+			})
+
+			-- global toggle key (works in normal buffers AND in Neo-tree)
+			vim.keymap.set("n", "<leader>e", "<cmd>Neotree toggle<CR>", {
+				desc = "Toggle Neo-tree",
+				silent = true,
+				noremap = true,
+			})
+		end,
+	},
 	-- LSP + Mason (language servers) + format on save
 	{
 		"neovim/nvim-lspconfig",
@@ -117,7 +146,6 @@ require("lazy").setup({
 	},
 
 	-- Noice
-	-- lazy.nvim
 	{
 		"folke/noice.nvim",
 		event = "VeryLazy",
@@ -245,6 +273,22 @@ require("lazy").setup({
 				},
 			})
 			vim.cmd.colorscheme("catppuccin")
+
+			-- 👇 Purple, smooth yank highlight
+			vim.api.nvim_set_hl(0, "YankHighlight", {
+				bg = "#cba6f7", -- Catppuccin purple
+				fg = "#1e1e2e", -- Dark text so it’s readable
+				blend = 10, -- Slight blend for smoothness
+			})
+
+			vim.api.nvim_create_autocmd("TextYankPost", {
+				callback = function()
+					vim.highlight.on_yank({
+						higroup = "YankHighlight",
+						timeout = 200, -- ms; tweak: 150–250 for feel
+					})
+				end,
+			})
 		end,
 	},
 
@@ -265,30 +309,6 @@ require("lazy").setup({
 				highlight = { enable = true },
 				indent = { enable = true },
 			})
-		end,
-	},
-
-	-- Neo-tree (file explorer)
-	{
-		"nvim-neo-tree/neo-tree.nvim",
-		branch = "v3.x",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"nvim-tree/nvim-web-devicons",
-			"MunifTanjim/nui.nvim",
-		},
-		config = function()
-			vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
-
-			require("neo-tree").setup({
-				filesystem = {
-					follow_current_file = true,
-					hijack_netrw_behavior = "open_default", -- replace netrw
-				},
-			})
-
-			-- <leader>e to toggle file explorer
-			vim.keymap.set("n", "<leader>e", ":Neotree toggle filesystem reveal<CR>", { desc = "Neo-tree" })
 		end,
 	},
 
@@ -317,7 +337,7 @@ require("lazy").setup({
 			})
 
 			-- Keymaps for Telescope
-			vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]ind [F]iles" })
+			vim.keymap.set("n", "<leader><leader>", builtin.find_files, { desc = "[F]ind [F]iles" })
 			vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "[F]ind by [G]rep" })
 			vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "[F]ind [B]uffers" })
 			vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "[F]ind [H]elp" })
