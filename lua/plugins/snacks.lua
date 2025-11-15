@@ -6,7 +6,6 @@ return {
 	---@type snacks.Config
 	opts = {
 		-- enable the pieces that replace what you removed
-		explorer = { enabled = true }, -- replaces neo-tree
 		picker = { enabled = true }, -- replaces telescope
 		notifier = {
 			enabled = true, -- replaces noice (for notifications)
@@ -60,21 +59,8 @@ return {
 			end,
 			desc = "Help Tags (Snacks)",
 		},
-
 		---------------------------------------------------------------------------
-		-- Explorer (Neo-tree replacement)
-		---------------------------------------------------------------------------
-		-- was: <leader>e -> Neotree toggle
-		{
-			"<leader>e",
-			function()
-				Snacks.explorer()
-			end,
-			desc = "File Explorer (Snacks)",
-		},
-
-		---------------------------------------------------------------------------
-		-- Notifications (Noice-ish replacement)
+		-- Notifigations
 		---------------------------------------------------------------------------
 		{
 			"<leader>n",

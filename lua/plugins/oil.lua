@@ -12,7 +12,7 @@ return {
 		})
 
 		-- Open Oil in the current window
-		vim.keymap.set("n", "<leader>ol", "<cmd>Oil<CR>", {
+		vim.keymap.set("n", "<leader>e", "<cmd>Oil<CR>", {
 			desc = "Open Oil file explorer",
 			silent = true,
 		})
